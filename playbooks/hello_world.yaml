@@ -1,0 +1,7 @@
+---
+- name: Test Connectivity
+  hosts: routers
+  gather_facts: no
+  tasks:
+    - name: Ping devices
+      ansible.builtin.ping:
