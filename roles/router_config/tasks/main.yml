@@ -1,2 +1,19 @@
 ---
+- name: Gather facts from routers
+  cisco.ios.ios_facts:
+    gather_subset: all
+
+- name: Configure loopback interface (with loop and conditional)
+  cisco.ios.ios_config:
+    lines:
+      - interface Loopback{{ item.id }}
+      - ip address {{ item.ip }} 255.255.255.255
+    parents: interface Loopback{{ item.id }}
+  loop: "{{ loopback_interfaces }}"
+  when: inventory_hostname in groups['routers']  # Conditional: Only for routers group
+
+- name: Debug output
+  debug:
+    msg: "Configured Loopback on {{ inventory_hostname }} with IP {{ item.ip }}"
+  loop: "{{ loopback_interfaces }}"
 # tasks file for roles/router_config
